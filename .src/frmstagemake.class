@@ -1,0 +1,849 @@
+' Gambas class file
+
+' Give some convenient names for the common bases
+Public Const BASE_BINARY As Integer = 2
+Public Const BASE_OCTAL As Integer = 8
+Public Const BASE_DENARY As Integer = 10
+Public Const BASE_TEN As Integer = 10
+Public Const BASE_HEX As Integer = 16
+' This table of digit values allows up to base36, using the same
+' principle as for standard hex representation
+' (i.e. A=10, B=11...F=15 etc)
+Private DIGITS As String[] = ["0", "1", "2", "3", "4", "5", "6", "7",
+"8", "9",
+"A", "B", "C", "D", "E", "F", "G", "H",
+"I", "J", "K", "L", "M",
+"N", "O", "P", "Q", "R", "S", "T", "U",
+"V", "W", "X", "Y", "Z"]
+
+
+
+Public Sub btn169_Click()
+
+  
+
+End
+
+Private Sub resizeform()
+  
+  Dim newH As Integer
+  Dim newW As Integer
+  Dim newX As Integer
+  Dim newY As Integer
+      
+' resize form
+' move panels 
+  pnlformat.Move(Me.W - hpnlratio.W - 20, hpnlratio.Y)
+  newX = 20
+  newY = 20
+  newW = pnlformat.X - (newX * 2)
+  Select Case hpnlratio.Tag
+    Case "16:9"
+     
+      
+                
+' '   16:9 ratio for webpage
+      newH = newW / 1.778
+      'check if fits
+      If newH + newY > Me.H Then 
+        'change hieght set width
+        newH = Me.H - (newX + 20)
+        newW = newH * (16 / 9)
+      Endif
+           
+    Case "4:3"
+      newH = newW * (3 / 4) 
+      'check if fits
+      If newH + newY > Me.H Then 
+        'change hieght set width
+        newH = Me.H - (newX + 20)
+        newW = newH * (4 / 3)
+      Endif
+        
+  End Select
+   htmlstageview.Move(newX, newY, newW, newH)
+   loadView()
+   
+End
+Private Sub loadDefaults()
+  
+  
+  
+  
+  'saves the OpenLP URL
+  
+  setopenlpurl.Tag = Settings["OpenLPURL"]
+  setopenlpurl.Caption = "OpenLP-URL: " & setopenlpurl.Tag
+  setport.Tag = Settings["OpenLPPort"]
+  setport.Caption = "OpenLP-Port: " & setport.Tag
+  
+  
+  
+End
+
+Private Sub saveDefaults()
+  
+  
+  'saves the OpenLP URL
+  Settings["OpenLPURL"] = setopenlpurl.Tag
+  Settings["OpenLPPort"] = setport.Tag
+  
+  
+  
+End
+
+Public Sub rat169_Click()
+
+  hpnlratio.Tag = "16:9"
+  resizeform()
+End
+
+Public Sub Form_Open()
+
+  sldFont.Value = "Kingthings Clarity,12"
+  'sldcolpick.Current = 4
+  loadDefaults()
+  loadView()
+
+
+End
+
+Public Sub Form_Resize()
+
+  resizeform()
+
+End
+
+Public Sub rat43_Click()
+
+    hpnlratio.Tag = "4:3"
+    resizeform()
+
+End
+Private Function makeHTML(Optional preview As String = True) As String
+  Dim newCSS As String
+  Dim newHTML As String
+  Dim JavaLocation As String
+  
+  
+  
+  
+  'loads the html and CSS for preview
+  'Load base
+  htmlstageview.Clear
+  'htmlstageview.ResizeScaled(htmlstageview.W, htmlstageview.H)
+  'HTML
+  newHTML = HTMLopen()
+  
+  newHTML = newHTML & GB.CrLf
+  
+  'Head
+  newHTML &= "<HEAD>" & GB.CrLf
+  
+  'Style
+  newHTML = newHTML & GB.CrLf
+  newHTML = newHTML & "<STYLE>" & GB.CrLf
+  
+  'Body css
+  newHTML &= "body {" & GB.CrLf
+  newHTML &= "   background-color:transparent;" & GB.CrLf
+  newHTML &= "  " & GB.CrLf
+  newHTML &= "}" & GB.CrLf
+
+  'text formatting
+  newHTML = newHTML & csstextstyle() & GB.CrLf
+    
+
+   'close style
+   newHTML = newHTML & "</STYLE>" & GB.CrLf
+   
+   
+   If preview = False Then 
+    'add java for OpenLP
+    'set path to save location
+    JavaLocation = "" 'same folder
+    newHTML &= "<script type=\"text/javascript\" src=\"" & JavaLocation & "jquery.min.js\"></script>" & GB.CrLf
+    
+    newHTML &= "<script type=\"text/javascript\" src=\"" & JavaLocation & "stage.js\"></script>" & GB.CrLf
+    
+    
+    Else
+    
+    'Set path to tmplocation and set defailt text if needed
+    
+    
+    If sldlive.Value Then 
+    
+    JavaLocation = ""
+    newHTML &= "<script type=\"text/javascript\" src=\"" & JavaLocation & "jquery.min.js\"></script>" & GB.CrLf
+    
+    newHTML &= "<script type=\"text/javascript\" src=\"" & JavaLocation & "stage.js\"></script>" & GB.CrLf
+    
+    'create java
+    'SaveJava(JavaLocation)
+    
+    
+      
+    Endif
+    
+    
+    
+  Endif
+  
+  
+  
+    
+  'create java files in appropiate locations
+  'assume overwrite
+  
+  '
+  
+   
+   
+   newHTML = newHTML & "</HEAD>" & GB.CrLf
+      
+  'Body
+  newHTML &= "<body>" & GB.CrLf
+  newHTML &= "" & GB.CrLf
+  
+  newHTML &= "<div id=\"bgslide\" class=\"slide\"></div>" & GB.CrLf 
+  newHTML &= "<div id=\"currentslide\" class=\"slidetext\">" & GB.CrLf 
+  
+  If preview = True And sldlive.Value = False Then 
+  
+    newHTML &= "For lower this is a test of the program<BR>" & GB.CrLf
+    newHTML &= "It will see and show this text<BR>" & GB.CrLf
+    newHTML &= "In the live this will be replaced by the Lyrics.<BR>" & GB.CrLf
+    newHTML &= "Now is the time to worship. Now is the time to worship. " & GB.CrLf
+
+  Endif
+  
+  newHTML &= "</div>" & GB.CrLf
+  newHTML &= "" & GB.CrLf
+  newHTML &= "</body>" & GB.CrLf
+  newHTML &= "</html>" & GB.CrLf
+
+Return newHTML  
+  
+End
+
+Private Sub loadView()
+  Dim newHTML As String
+  
+  newHTML = makeHTML()
+  
+  If sldlive.Value = False Then 
+    htmlstageview.SetHtml(newHTML)
+  Else 
+    'make temp files
+    'save html
+    'set filename
+    Dim tmppath As String
+    Dim filepath As String
+    
+    tmppath = "~/.local/share/openlp/stages/tmp/"
+    
+    Try Mkdir tmppath
+    
+    
+    
+    filepath = tmppath & "/stage.html"
+    
+    Try Kill filepath
+    File.Save(filepath, newHTML) 
+    
+    'Make and save java
+    SaveJava(tmppath)
+    
+    
+    'load url
+    'assume http://localhost:4316/stage/
+
+        
+      'htmlstageview.Url = "http://localhost:4316/stage/tmp/"
+     Dim newurl As String 
+     
+     newurl = Trim(setopenlpurl.Tag) & ":" & Trim(setport.Tag) & "/stage/tmp/"
+      htmlstageview.Url = newurl
+  
+    
+    
+     
+  Endif
+  
+  
+  
+  
+End
+Private Function getBGCSS() As String
+    Dim myHTMLCol As String
+    Dim curCSS As String
+    Dim myRGBa As String  
+    myHTMLCol = Color.ToHTML(sldcol.Value)
+    curCSS = curCSS & "cCStrolor:" & myHTMLCol & ";" & GB.CrLf
+  
+    If chkbackground.Value Then 
+     'get colour
+     myHTMLCol = Color.ToHTML(sldcolpick.Value)
+     myRGBa = CStr(toInt(Mid(myHTMLCol, 2, 2), 16)) & "," & CStr(toInt(Mid(myHTMLCol, 4, 2), 16)) & "," & CStr(toInt(Mid(myHTMLCol, 6, 2), 16))
+     
+     curCSS = "background-color: rgba(" & myRGBa & "," & sldbgcolvalue.Text & "); " & GB.CrLf
+   Endif       
+  
+  Return curCSS
+End
+
+Private Function csstextstyle() As String
+  
+  Dim curCSS As String
+  Dim curFont As String[]
+  Dim myRGBa As String
+  Dim myHTMLCol As String
+  Dim curPos As String
+  
+  curCSS = "body {" & GB.CrLf
+  curCSS &= "background-color:transparent;" & GB.CrLf
+  curCSS &= "}"
+  
+  curCSS &= ".slideclear {}" & GB.CrLf
+  
+  
+  curCSS &= ".slide {" & GB.CrLf
+  
+  'Position
+  Select Case frapos.Tag
+    Case 1
+      'middle format 
+      'newHTML = newHTML & File.Load(Application.Path & "/css-middle.css")
+      curPos = "  position: absolute;" & GB.CrLf
+      curPos &= "  margin: 0;" & GB.CrLf
+      curPos &= "  top: 50%;" & GB.CrLf
+      curPos &= "  left: 50%;" & GB.CrLf
+      curPos &= "  -ms-transform: translate(-50%, -50%);" & GB.CrLf
+      curPos &= "  transform: translate(-50%, -50%);" & GB.CrLf
+      curPos &= "  width: 70%;" & GB.CrLf
+      
+      curPos &= "  padding: 4%;" & GB.CrLf
+      
+      curCSS &= curPos & GB.CrLf
+      'set BG for body if set
+      curCSS &= "}" & GB.CrLf
+      
+      curCSS &= "body {" & GB.CrLf
+      
+      curCSS &= getBGCSS() & GB.CrLf
+      curCSS &= "}" & GB.CrLf
+        
+    Case 2
+      'lower format
+      curPos = "  position: absolute; " & GB.CrLf
+      curPos &= "  margin: 0;" & GB.CrLf
+      curPos &= "  top: " & CStr(sldpos.Value) & "%;" & GB.CrLf
+      curPos &= "  height: " & CStr(sldsize.Value) & "%; " & GB.CrLf
+      curPos &= "  width: 100%;" & GB.CrLf
+      curCSS &= curPos & GB.CrLf
+      
+      'add BG
+      curCSS &= getBGCSS() & GB.CrLf
+      
+      
+         
+      curCSS &= "}" & GB.CrLf   
+
+   End Select
+   
+   
+      
+  
+  'slidetext
+  curCSS &= ".slidetext {" & GB.CrLf
+  'set pos as Background
+  curCSS &= curPos & GB.CrLf
+    
+   curCSS &= "  padding: " & sldmarginval.Text & "; " & GB.CrLf 
+  'font
+   curFont = Split(sldFont.Value, ",")
+    
+   curCSS = curCSS & "font-family: " & curFont[0] & ";" & GB.CrLf
+   curCSS &= "  text-align: " & getAlginment() & "; " & GB.CrLf 
+  'size
+  'if varabile set varabile
+  If chksldrel.Value Then 
+    curCSS = curCSS & "font-size: " & lblsldrel.Text & ";" & GB.CrLf
+  Else 
+    curCSS = curCSS & "font-size: " & curFont[1] & "pt;" & GB.CrLf
+  Endif
+  'colour
+  curCSS = curCSS & "color: " & Color.ToHTML(sldcol.Value) & ";" & GB.CrLf
+  
+  
+  If slddrop.Value Then 
+    myHTMLCol = Color.ToHTML(slddrpcol.Value)
+    'myRGBa = CStr(toInt(Mid(myHTMLCol, 2, 2), 16)) & "," & CStr(toInt(Mid(myHTMLCol, 4, 2), 16)) & "," & CStr(toInt(Mid(myHTMLCol, 4, 2), 16))
+    curCSS = curCSS & "text-shadow: " & CStr(slddrph.Value) & "px " & CStr(slddrpv.Value) & "px " & CStr(slddrpb.Value) & "px " & myHTMLCol & ";" & GB.CrLf
+  Endif
+  
+  curCSS = curCSS & "}"
+  
+ 
+  
+  
+  Return curCSS
+  
+  
+  
+  
+  
+  
+  
+  
+  
+End
+
+
+Public Sub posmiddle_Click()
+
+  sldlblsize.Visible = False
+  sldsize.Visible = False
+  sldmargin.Visible = False
+  sldlblmargin.Visible = False
+  
+  frapos.Tag = 1
+  loadView()
+End
+
+Public Sub poslower_Click()
+
+  'Set if visable
+  sldlblsize.Visible = True
+  sldsize.Visible = True
+  sldmargin.Visible = True
+  sldlblmargin.Visible = True
+  
+  frapos.Tag = 2
+  loadView()
+
+End
+
+
+
+
+Public Sub htmlstageview_MouseDown()
+
+  
+
+End
+Private Sub SaveJava(filepath As String, Optional orgBasePath As String = "/usr/local/share/applications/OpenLP-Companion/")
+ Dim curStageJava As String
+  'open java files and edit and save
+  'save and edit java
+    
+    Dim orgFile As String
+    Dim desFile As String
+    'jquerry files
+    orgFile = orgBasePath & "jquery.min.js" 
+    'newpath
+    Try Mkdir filepath
+    desFile = filepath & "jquery.min.js"
+    
+    Try Kill desFile
+    Copy orgFile To desFile
+    
+    'openlp java
+    orgFile = orgBasePath & "stage.js" 
+    curStageJava = File.Load(orgFile)
+    
+    'change fade (TBD)
+    curStageJava = Replace(curStageJava, "var intfadein = 300;", "var intfadein = " & CStr(sldfadein.Value) & ";")
+    curStageJava = Replace(curStageJava, "var intfadeout= 300;", "var intfadeout = " & CStr(sldfadeout.Value) & ";")
+    curStageJava = Replace(curStageJava, "var strtype=\"songs\";", "var strtype = \"" & cbotype.Text & "\";")
+    ' 
+    
+    'save file
+    desFile = filepath & "stage.js"
+    File.Save(desFile, curStageJava)
+  
+  
+End Sub
+
+
+Public Sub btnSave_Click()
+   Dim filepath As String
+   'Dim baseorgpath As String
+   Dim messResponse As Integer
+   Dim orgBasePath As String
+   Dim orgpath As String
+   Dim curStageJava As String
+   
+   If txtname.Text Then 
+    ' /home/steven/bin/OpenLP-Companion/OpenLP-Companion/jquery.min.js
+    'set shared file location
+    orgBasePath = "/usr/local/share/applications/OpenLP-Companion"
+    ' /usr/local/share/applications/OpenLP-Companion
+    
+    'orgBasePath = Application.Path & "/.hidden" 'if in debug mode enable this
+    
+    
+    
+    filepath = "~/.local/share/openlp/stages/" 
+    'Create Stages folder if needed
+    
+    Try Mkdir (filepath)
+    filepath = "~/.local/share/openlp/stages/" & txtname.Text
+    'create folder for new stage view
+    
+    If Exist(filepath) Then 
+      'already a stageview with this name
+      Message.Title = "Stage View Exists"  
+      messResponse = Message.Warning("The " & txtname.Text & " already exists.<BR>Do you wish To overwrite? ", " Yes ", " No ")
+      If messResponse = 2 Then 
+        Return 'exit the sub
+      Endif
+    Endif
+    Try Mkdir (filepath)
+    
+    'set filename
+    filepath &= "/stage.html"
+    
+    Try Kill filepath
+    File.Save(filepath, makeHTML(False)) 
+    
+    'Make java
+    SaveJava("~/.local/share/openlp/stages/" & txtname.Text)
+    
+    
+    
+    
+     
+    
+    
+  Else
+    
+    Message("Please give your stage view a name!")
+    
+    
+    
+      
+   Endif
+   
+  'save the HTML
+  loadView()
+  
+
+End
+
+Public Sub sldFont_Click()
+
+  
+
+End
+
+
+
+Public Sub chksldrel_Click()
+
+  sldsldrel.Visible = chksldrel.Value
+  lblsldrel.Visible = chksldrel.Value
+  loadView()
+End
+
+Public Sub sldsldrel_Change()
+
+  lblsldrel.Text = CStr(sldsldrel.Value / 10) & "vh"
+  loadView()
+
+End
+
+
+
+Public Sub chkbackground_Click()
+  sldlblTrans.Visible = chkbackground.Value
+  sldbgcplgrad.Visible = chkbackground.Value
+  sldcolpick.Visible = chkbackground.Value
+  sldbgcolvalue.Visible = chkbackground.Value
+  
+  loadView()
+  
+End
+
+Public Sub sldbgcolvalue_MouseDown()
+
+  
+
+End
+
+Public Sub slddrop_Click()
+
+  'hide or show elments
+  slddrph.Visible = slddrop.Value
+  slddrpv.Visible = slddrop.Value
+  slddrpb.Visible = slddrop.Value
+  slddrpcol.Visible = slddrop.Value
+  slddrpcol.Visible = slddrop.Value
+  sldlbldrp.Visible = slddrop.Value
+  sldlbldrp1.Visible = slddrop.Value
+  sldlbldrp2.Visible = slddrop.Value
+
+  loadView()
+
+End
+
+Public Sub grpsldbgcol_Change()
+
+  
+
+  
+  
+
+End
+
+Public Sub sldbgcplgrad_Change()
+
+  sldbgcolvalue.Text = CStr(sldbgcplgrad.Value / 100)
+  loadView()
+  
+
+End
+
+Private Function HTMLopen() As String
+
+Dim newHTML As String
+
+newHTML = "<!DOCTYPE html>" & GB.CrLf
+newHTML &= "<html>" & GB.CrLf
+newHTML &= "<!--" & GB.CrLf
+newHTML &= "###############################################################################" & GB.CrLf
+newHTML &= "# OpenLP - Open Source Lyrics Projection                                      #" & GB.CrLf
+newHTML &= "# --------------------------------------------------------------------------- #" & GB.CrLf
+newHTML &= "# Copyright (c) 2008-2017 OpenLP Developers                                   #" & GB.CrLf
+newHTML &= "# --------------------------------------------------------------------------- #" & GB.CrLf
+newHTML &= "# Is a  program is free software; you can redistribute it and/or modify it     #" & GB.CrLf
+newHTML &= "# under the terms of the GNU General Public License as published by the Free  #" & GB.CrLf
+newHTML &= "# Software Foundation; version 2 of the License.                              #" & GB.CrLf
+newHTML &= "#                                                                             #" & GB.CrLf
+newHTML &= "# OpenLP is distributed in the hope that it will be useful, but WITHOUT #" & GB.CrLf
+newHTML &= "# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       #" & GB.CrLf
+newHTML &= "# FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for    #" & GB.CrLf
+newHTML &= "# more details.                                                               #" & GB.CrLf
+newHTML &= "#                                                                             #" & GB.CrLf
+newHTML &= "# You should have received a copy of the GNU General Public License along     #" & GB.CrLf
+newHTML &= "# with this program; if not, write to the Free Software Foundation, Inc., 59  #" & GB.CrLf
+newHTML &= "# Temple Place, Suite 330, Boston, MA 02111-1307 USA                          #" & GB.CrLf
+newHTML &= "###############################################################################" & GB.CrLf
+newHTML &= "#this is a modified version to help create custom stage views. It assumes you have installed the custom stage views from Steven3363" & GB.CrLf
+newHTML &= "#https://github.com/steven3363/OpenLP-v3-Custom-Stage-Views/tree/main" & GB.CrLf
+newHTML &= "#" & GB.CrLf
+newHTML &= "" & GB.CrLf
+newHTML &= "-->" & GB.CrLf
+
+ 
+Return newHTML
+
+  
+  
+  
+End
+
+
+
+
+
+Public Sub sldcolpick_Click()
+
+  
+
+End
+
+Public Sub sldcolpick_Change()
+
+  loadView()
+
+End
+
+Public Function convertBase(numberIn As String, fromBase As Integer, toBase As Integer) As String
+
+Dim value As Integer
+value = toInt(numberIn, fromBase)
+Return intToBase(value, toBase)
+
+End
+
+Public Function intToBase(numberIn As Integer, base As Integer) As String
+
+Dim remain, numToDivide As Integer
+Dim result As String = ""
+
+numToDivide = numberIn
+If numToDivide < 1 Then
+result = "0"
+Else
+Do While numToDivide / base > 0
+remain = numToDivide Mod base
+'umToDivide = (Int)(numToDivide / base)
+result = DIGITS[remain] & result
+Loop
+End If
+Return result
+
+End
+
+Public Function toInt(inputStr As String, base As Integer) As Integer
+
+Dim idx, mult, result, value As Integer
+mult = 1
+For idx = Len(inputStr) To 1 Step -1
+' If we're in a base with digits bigger than 9
+' we need the Find to return 10 for A, 11 for B, 12 for C etc.
+value = DIGITS.Find(UCase(Mid$(inputStr, idx, 1)))
+' If we have a digit out of range, return -1
+If value >= base Then
+Return -1
+Endif
+value = value * mult
+result = result + value
+mult = mult * base
+Next
+Return result
+
+End
+
+Public Sub sldcol_Change()
+
+  loadView()
+
+End
+
+Public Sub sldpos_Change()
+
+  loadView()
+
+End
+
+Public Sub sldsize_Change()
+
+  loadView()
+
+End
+
+Public Sub slddrpcol_Change()
+
+  loadView()
+
+End
+
+Public Sub slddrph_Change()
+
+  loadView()
+
+End
+
+Public Sub slddrpv_Change()
+
+  loadView()
+
+End
+
+Public Sub slddrpb_Change()
+
+  loadView()
+
+End
+
+Public Sub sldtxtleft_Click()
+
+  loadView()
+
+End
+
+Public Sub sldtxtcentre_Click()
+
+  loadView()
+
+End
+
+Public Sub sldtxtright_Click()
+
+  loadView()
+
+End
+
+Private Function getAlginment() As String
+  
+  If sldtxtleft.Value Then 
+    Return "left"
+    
+  Endif
+  
+  If sldtxtcentre.Value Then 
+    Return "center"
+  Endif
+  
+  If sldtxtright.Value Then 
+    Return "right"
+  Endif
+  
+  
+End
+
+Public Sub sldmargin_Change()
+
+  sldmarginval.Tag = sldmargin.Value / 10
+  sldmarginval.Text = CStr(sldmarginval.Tag) & "%"
+  loadView()
+
+End
+
+Public Sub sldFont_Change()
+
+  loadView()
+
+End
+
+Public Sub sldlive_Click()
+
+  loadView()
+
+End
+
+Public Sub sldfadein_Change()
+
+  loadView()
+  
+
+End
+
+Public Sub sldfadeout_Change()
+
+  loadView()
+
+End
+
+Public Sub setopenlpurl_Click()
+
+  setopenlpurl.Tag = InputBox("Please enter the URL.<BR>Note: No checking is done!<BR>Please reset the live check To apply.", "Set OpenLP URL", setopenlpurl.Tag)
+  setopenlpurl.Caption = "OpenLP-URL: " & setopenlpurl.Tag
+
+
+End
+
+Public Sub setport_Click()
+
+  setport.Tag = InputBox("Please enter the Port.<BR>Note: No checking is done!<BR>Please reset the live check To apply.", "Set OpenLP Port", setport.Tag)
+  setport.Caption = "OpenLP-URL: " & setport.Tag
+
+End
+
+Public Sub setopenlpdefaults_Click()
+
+  setopenlpurl.Tag = "http://localhost"
+  setopenlpurl.Caption = "OpenLP-URL: " & setopenlpurl.Tag
+
+  setport.Tag = "4316"
+  setport.Caption = "OpenLP-URL: " & setport.Tag
+End
+
+Public Sub Form_Close()
+
+  saveDefaults()
+
+End

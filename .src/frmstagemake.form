@@ -1,0 +1,259 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,154,101)
+  { mnuFile Menu
+    Text = Shortcut(("File"), "F")
+    { mnuOpenLP Menu
+      Text = Shortcut(("OpenLP - Connection"), "O")
+      { setopenlpurl Menu
+        Text = ("OpenLP-URL: http://localhost")
+        Tag = "http://localhost"
+      }
+      { setport Menu
+        Text = ("OpenLP-Port: 4316")
+        Tag = "4316"
+      }
+      { setopenlpdefaults Menu
+        Text = Shortcut(("Reset"), "R")
+      }
+      { setsuer Menu
+        Text = ("OpenLP-User: xxxxx")
+        Enabled = False
+        Visible = False
+      }
+      { setpassword Menu
+        Text = ("OpenLP-Password")
+        Enabled = False
+        Visible = False
+      }
+    }
+  }
+  { pnlformat Panel
+    MoveScaled(105,0,45,97)
+    { hpnlratio Frame
+      MoveScaled(1,0,43,7)
+      Tag = "16:9"
+      Text = ("Ratio")
+      { rat43 RadioButton
+        MoveScaled(21,1,16,4)
+        Text = ("4:3")
+      }
+      { rat169 RadioButton
+        MoveScaled(1,1,16,4)
+        Text = ("16:9")
+        Value = True
+      }
+    }
+    { btnSave Button
+      MoveScaled(28,92,16,4)
+      Text = Shortcut(("Save"), "S")
+    }
+    { tabstageview TabStrip
+      MoveScaled(0,18,44,73)
+      Count = 2
+      Index = 0
+      Text = ("Slide")
+      { frapos Frame
+        MoveScaled(1,0,41,25)
+        Tag = "2"
+        Text = ("Position / Size")
+        { poslower RadioButton
+          MoveScaled(21,2,16,4)
+          Text = ("Lower Third")
+          Value = True
+        }
+        { posmiddle RadioButton
+          MoveScaled(2,2,16,4)
+          Enabled = False
+          ToolTip = ("Full screen centred")
+          Text = ("Middle")
+        }
+        { sldsize SliderBox
+          MoveScaled(2,15,37,4)
+          Value = 20
+        }
+        { sldlblsize Label
+          MoveScaled(3,12,16,3)
+          Text = ("Slide Height:")
+        }
+        { sldlblmargin Label
+          MoveScaled(3,20,8,4)
+          Text = ("Padding:")
+        }
+        { sldpos SliderBox
+          MoveScaled(2,9,37,4)
+          MinValue = 1
+          Value = 75
+        }
+        { sldlblpos Label
+          MoveScaled(3,6,15,3)
+          Text = ("Slide Position:")
+        }
+        { sldmargin Slider
+          MoveScaled(25,20,14,5)
+          MinValue = 1
+          Value = 10
+        }
+        { sldmarginval Label
+          MoveScaled(12,20,8,4)
+          Tag = "10"
+          Text = ("1%")
+        }
+      }
+      { fratextstyle Frame
+        MoveScaled(1,25,41,42)
+        Text = ("Text Style")
+        { slddrop CheckBox
+          MoveScaled(1,18,16,4)
+          Text = ("Drop Shadow")
+          Value = CheckBox.True
+        }
+        { sldFont FontBox
+          MoveScaled(2,8,31,4)
+        }
+        { chksldrel CheckBox
+          MoveScaled(1,13,16,4)
+          Text = ("Relative size:")
+          Value = CheckBox.True
+        }
+        { sldsldrel Slider
+          MoveScaled(19,12,21,6)
+          MinValue = 1
+          Value = 34
+        }
+        { lblsldrel Label
+          MoveScaled(15,13,6,4)
+          Text = ("3.4vh")
+        }
+        { chkbackground CheckBox
+          MoveScaled(1,27,20,4)
+          Text = ("Background Colour")
+          Value = CheckBox.True
+        }
+        { sldbgcplgrad Slider
+          MoveScaled(22,31,20,6)
+          MaxValue = 200
+          Value = 75
+        }
+        { sldlblTrans Label
+          MoveScaled(1,32,13,4)
+          Text = ("Transparancy:")
+        }
+        { sldbgcolvalue Label
+          MoveScaled(13,32,14,4)
+          Text = ("0.75")
+        }
+        { sldcol ColorButton
+          MoveScaled(34,8,6,4)
+          Tag = "&H000000"
+          Value = &HFFFFFF
+        }
+        { sldcolpick ColorButton
+          MoveScaled(34,27,6,4)
+          Tag = "&HFFFFFF"
+          Value = &H000000
+        }
+        { sldfadein SpinBox
+          MoveScaled(8,37,11,4)
+          MaxValue = 3000
+          Step = 50
+          Value = 300
+        }
+        { sldfadeout SpinBox
+          MoveScaled(28,37,12,4)
+          MaxValue = 3000
+          Step = 50
+          Value = 300
+        }
+        { sldlblfadein Label
+          MoveScaled(1,37,8,4)
+          Text = ("Fade In:")
+        }
+        { sldlblfadeout Label
+          MoveScaled(20,37,8,4)
+          Text = ("Fade Out:")
+        }
+        { slddrph SpinBox
+          MoveScaled(6,22,9,4)
+          ToolTip = ("Horizontal Shadow")
+          MinValue = -10
+          MaxValue = 10
+          Value = 1
+        }
+        { slddrpv SpinBox
+          MoveScaled(19,22,9,4)
+          ToolTip = ("Vertical Shadow")
+          MinValue = -10
+          MaxValue = 10
+          Value = 1
+        }
+        { slddrpb SpinBox
+          MoveScaled(31,22,9,4)
+          ToolTip = ("Blur")
+          MaxValue = 10
+          Value = 4
+        }
+        { slddrpcol ColorButton
+          MoveScaled(32,17,8,4)
+        }
+        { sldlbldrp Label
+          MoveScaled(2,22,3,4)
+          Text = ("h")
+        }
+        { sldlbldrp1 Label
+          MoveScaled(16,22,3,4)
+          Text = ("V")
+        }
+        { sldlbldrp2 Label
+          MoveScaled(29,22,3,4)
+          Tag = "blur"
+          Text = ("b")
+        }
+        { sldtxtleft ToggleButton
+          MoveScaled(2,3,5,4)
+          Picture = Picture["icon:/32/align-left"]
+          Radio = True
+        }
+        { sldtxtcentre ToggleButton
+          MoveScaled(8,3,6,4)
+          Picture = Picture["icon:/32/align-center"]
+          Radio = True
+          Value = True
+        }
+        { sldtxtright ToggleButton
+          MoveScaled(15,3,5,4)
+          Picture = Picture["icon:/32/align-right"]
+          Radio = True
+        }
+        { sldlive CheckBox
+          MoveScaled(22,3,16,4)
+          Text = ("Use Live")
+        }
+      }
+      Index = 1
+      Text = ("Title")
+      Index = 0
+    }
+    { txtname TextBox
+      MoveScaled(14,8,29,4)
+    }
+    { lblName Label
+      MoveScaled(2,8,11,4)
+      Text = ("Name:")
+    }
+    { cbotype ComboBox
+      MoveScaled(15,13,28,4)
+      Enabled = False
+      List = [("bibles"), ("songs")]
+      Text = ("songs")
+    }
+    { lbltype Label
+      MoveScaled(2,13,8,4)
+      Text = ("Type")
+    }
+  }
+  { htmlstageview WebView
+    MoveScaled(5,2,98,65)
+  }
+}

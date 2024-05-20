@@ -1,0 +1,20 @@
+* Mon May 20 2024 The Harvest Is Ready <steven@theharvestisready.com> 0.0.6
+- Padding margin now can be set to fraction of a percentage point
+
+* Mon May 20 2024 The Harvest Is Ready <steven@theharvestisready.com> 0.0.5
+- URl and port of OpenLP can be configured
+
+* Mon May 20 2024 The Harvest Is Ready <steven@theharvestisready.com> 0.0.4
+- Can use live view from OpenLP to see how it will look. assumes on same PC @ port 4316
+
+* Mon May 20 2024 The Harvest Is Ready <steven@theharvestisready.com> 0.0.3
+- Fix BG color property
+
+* Sat May 18 2024 The Harvest Is Ready <steven@theharvestisready.com> 0.0.2
+- Initial release
+- Can create and modify the following
+- Postition of the lower third
+- BG Colour
+- Size and font of Text
+- Drop Shadow
+
